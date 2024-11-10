@@ -1,7 +1,15 @@
 {
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "postcss.config.js"
+  ],
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
@@ -14,7 +22,9 @@
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "#*": ["./*"],
+      "#*": [
+        "./*"
+      ],
       "@/icon-name": [
         "./app/components/ui/icons/name.d.ts",
         "./types/icon-name.d.ts"
@@ -23,7 +33,6 @@
     "skipLibCheck": true,
     "allowImportingTsExtensions": true,
     "noEmit": true,
-
     // Referenced project must have setting "composite": true.
     "composite": true,
     "disableReferencedProjectLoad": true,

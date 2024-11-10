@@ -1,3 +1,4 @@
+import { cssBundleHref } from '@remix-run/css-bundle'
 import { type LinksFunction } from '@remix-run/node'
 import { Links, LiveReload, Scripts } from '@remix-run/react'
 import faviconAssetUrl from './assets/favicon.svg'
@@ -17,7 +18,9 @@ export const links: LinksFunction = () => {
 		// 🐨 Add the cssBundleHref to the links array
 		// 🦺 feel free to handle the undefined case however you like or ignore
 		// the TypeScript error if you want. I'll show you how I handle it later.
-	]
+		cssBundleHref ? { rel: 'stylesheet', href: cssBundleHref } : null,
+	].filter(link => link !== null)
+	// .filter(Boolean)
 }
 
 export default function App() {
