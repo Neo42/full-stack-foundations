@@ -1,7 +1,14 @@
-import { Link, NavLink, Outlet, useParams } from '@remix-run/react'
+import {
+	Link,
+	NavLink,
+	Outlet,
+	useLoaderData,
+	useParams,
+} from '@remix-run/react'
 import { cn } from '#app/utils/misc.tsx'
 // 🐨 get the db utility using:
-// import { db } from '#app/utils/db.server.ts'
+import { db } from '#app/utils/db.server.ts'
+import { json, LoaderFunctionArgs } from '@remix-run/node'
 
 // 🐨 add a `loader` export here which uses the params from the LoaderFunctionArgs
 // 🐨 you'll get the username from params.username
@@ -25,15 +32,35 @@ import { cn } from '#app/utils/misc.tsx'
 // 💯 as extra credit, try to do it with new Response instead of using the json util just for fun
 // 🦉 Note, you should definitely use the json helper as it's easier and works better with TypeScript
 // but feel free to try it with new Response if you want to see how it works.
+export async function loader({ params }: LoaderFunctionArgs) {
+	const { username } = params
+	const owner = db.user.findFirst({
+		where: {
+			username: { equals: username },
+		},
+	})
+	const notes = db.note.findMany({
+		where: {
+			owner: {
+				username: { equals: username },
+			},
+		},
+	})
+	return json({
+		owner: { name: owner.name, username: owner.username },
+		notes: notes.map(note => ({ id: note.id, title: note.title })),
+	})
+}
 
 export default function NotesRoute() {
 	// 💣 we no longer need the params, delete this
-	const params = useParams()
+	// const params = useParams()
 	// 🐨 get the data from useLoaderData
 	// 🐨 update the ownerDisplayName to be what you get from the loader data
 	// 💯 note, the user's name is not required, so as extra credit, add a
 	// fallback to the username
-	const ownerDisplayName = params.username
+	const { owner, notes } = useLoaderData<typeof loader>()
+	const ownerDisplayName = owner.name ?? owner.username
 	const navLinkDefaultClassName =
 		'line-clamp-2 block rounded-l-full py-2 pl-8 pr-6 text-base lg:text-xl'
 	return (
@@ -51,16 +78,18 @@ export default function NotesRoute() {
 							🐨 instead of hard coding the note, create one <li> for each note
 							in the database with data.notes.map
 						*/}
-							<li className="p-1 pr-0">
-								<NavLink
-									to="some-note-id"
-									className={({ isActive }) =>
-										cn(navLinkDefaultClassName, isActive && 'bg-accent')
-									}
-								>
-									Some Note
-								</NavLink>
-							</li>
+							{notes.map(note => (
+								<li key={note.id} className="p-1 pr-0">
+									<NavLink
+										to={note.id}
+										className={({ isActive }) =>
+											cn(navLinkDefaultClassName, isActive && 'bg-accent')
+										}
+									>
+										{note.title}
+									</NavLink>
+								</li>
+							))}
 						</ul>
 					</div>
 				</div>

@@ -1,6 +1,7 @@
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import { db } from '#app/utils/db.server.ts'
+import { invariantResponse } from '#app/utils/misc.js'
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const user = db.user.findFirst({
@@ -16,8 +17,12 @@ export async function loader({ params }: LoaderFunctionArgs) {
 	// "#app/utils/misc.ts" to do this in a single line of code (just make sure to
 	// supply the proper status code)
 	// 🦺 then you can remove the @ts-expect-error below 🎉
+	// if (!user) {
+	// 	throw new Response('User not found', { status: 404 })
+	// }
+	invariantResponse(user, 'User not found', { status: 404 })
+
 	return json({
-		// @ts-expect-error 🦺 we'll fix this next
 		user: { name: user.name, username: user.username },
 	})
 }
