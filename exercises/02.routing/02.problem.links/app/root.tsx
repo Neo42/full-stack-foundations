@@ -2,6 +2,7 @@ import os from 'node:os'
 import { cssBundleHref } from '@remix-run/css-bundle'
 import { json, type LinksFunction } from '@remix-run/node'
 import {
+	Link,
 	Links,
 	LiveReload,
 	Outlet,
@@ -37,10 +38,10 @@ export default function App() {
 				<header className="container mx-auto py-6">
 					<nav className="flex justify-between">
 						{/* 🐨 switch this div to a Link from @remix-run/react and link to "/" */}
-						<div>
+						<Link to="/">
 							<div className="font-light">epic</div>
 							<div className="font-bold">notes</div>
-						</div>
+						</Link>
 					</nav>
 				</header>
 
@@ -50,10 +51,10 @@ export default function App() {
 
 				<div className="container mx-auto flex justify-between">
 					{/* 🐨 switch this div to a Link from @remix-run/react and link to "/" */}
-					<div>
+					<Link to="/">
 						<div className="font-light">epic</div>
 						<div className="font-bold">notes</div>
-					</div>
+					</Link>
 					<p>Built with ♥️ by {data.username}</p>
 				</div>
 				<div className="h-5" />
