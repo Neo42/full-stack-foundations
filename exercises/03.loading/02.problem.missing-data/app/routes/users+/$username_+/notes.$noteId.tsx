@@ -1,7 +1,7 @@
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { db } from '#app/utils/db.server.ts'
-import { invariantResponse } from '#app/utils/misc.js'
+import { invariantResponse } from '#app/utils/misc.tsx'
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const note = db.note.findFirst({
